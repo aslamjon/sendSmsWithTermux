@@ -19,12 +19,15 @@ app.post('/', (req, res) => {
     exec(`termux-sms-send -n ${phone} ${text}`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
-            return;
+            res.send({ message: error.message });
+            // return;
         }
         if (stderr) {
             console.log(`stderr: ${stderr}`);
-            return;
+            res.send({ message: stderr })
+            // return;
         }
+        res.send({ message: `SMS has been sent successfully`, phone, text })
         console.log(`stdout: ${stdout}`);
     });
 })
