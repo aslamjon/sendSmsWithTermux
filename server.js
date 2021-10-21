@@ -15,7 +15,7 @@ app.use('/', express.static("./public"));
 app.get("/", express.static(path.join(__dirname, "./public")));
 app.post('/', (req, res) => {
     const {phone, text} = req.body;
-
+    console.log("came post request")
     exec(`termux-send-sms -n ${phone} ${text}`, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
