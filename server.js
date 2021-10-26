@@ -60,7 +60,7 @@ function getCode(){
   else return code;
 }
 
-function execute(command='', success={}) {
+function execute(req, res, command='', success={}) {
   exec(`${command}`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`);
@@ -84,7 +84,7 @@ app.post('/', (req, res) => {
   temp.phoneNumber[phone] = code;
   writeData('./data/temp.json',temp);
   code = `Confirm code: ${code}`;
-  execute(`termux-sms-send -n ${phone} ${code}`, { message: `SMS has been sent successfully`, phone });
+  execute(req, res, `termux-sms-send -n ${phone} ${code}`, { message: `SMS has been sent successfully`, phone });
 })
 
 app.post('/confirm', (req, res) => {
