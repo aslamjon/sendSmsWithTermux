@@ -54,9 +54,9 @@ app.get("/", express.static(path.join(__dirname, "./public")));
 app.get('/tunnels', getTunnels);
 
 function getCode(){
-  let code = Math.floor(Math.random() * 1000000);
+  let code = String(Math.floor(Math.random() * 1000000));
   console.log("Create code: ", code)
-  if (code.split('').length != 6) getCode();
+  if (code.length != 6) getCode();
   else return code;
 }
 
