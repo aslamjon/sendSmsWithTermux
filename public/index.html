@@ -10,17 +10,17 @@
         #message {
             opacity: 0;
             transition: 0.3s;
-            transform: translateX(100%);
+            transform: translateX(100vw);
         }
         #confirm {
             opacity: 0;
             transition: 0.3s;
-            transform: translateX(-100%);
+            transform: translateX(-100vw);
         }
         #welcom {
             opacity: 0;
             transition: 0.3s;
-            transform: translateY(-100%);
+            transform: translateY(-100vh);
         }
     </style>
 </head>
@@ -59,10 +59,10 @@
 
         function useMessage(text=''){
             message.innerHTML = text;
-            message.style.transform = "translateX(0%)";
+            message.style.transform = "translateX(0vw)";
             message.style.opacity = 1;
             setTimeout(() => {
-                message.style.transform = "translateX(100%)";
+                message.style.transform = "translateX(100vw)";
                 message.style.opacity = 0;
             }, 5000);
         }
@@ -80,7 +80,7 @@
                 form.style.opacity = 0;
                 form.style.display = "none";
                 confirmForm.style.opacity = 1;
-                confirmForm.style.transform = "translateX(0%)";
+                confirmForm.style.transform = "translateX(0vw)";
             }).catch(err => {
                 useMessage(err.message);
             })
@@ -98,10 +98,10 @@
             }).then(res => res.json()).then(res => {
                 if (res.login) {
                     confirmForm.style.opacity = 0;
-                    confirmForm.style.transform = "translateX(-100%)";
+                    confirmForm.style.transform = "translateX(-100vw)";
                     useMessage("Welcom to our website");
                     welcom.style.opacity = 1;
-                    welcom.style.transform = "translateY(0%)";
+                    welcom.style.transform = "translateY(0vh)";
                 } else {
                     useMessage("Code is incorrect. Please try again")
                 }
