@@ -56,7 +56,7 @@ app.get('/tunnels', getTunnels);
 function getCode(){
   let code = Math.floor(Math.random() * 1000000);
   console.log("Create code: ", code)
-  if (code.length != 6) getCode();
+  if (code.split('').length != 6) getCode();
   else return code;
 }
 
