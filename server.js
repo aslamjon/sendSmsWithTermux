@@ -48,51 +48,48 @@ async function getTunnels(req, res) {
   res.send(getSaveAndPostUrl(serverName));
 }
 
-
 app.use('/', express.static("./public"));
 app.get("/", express.static(path.join(__dirname, "./public")));
+
 app.get('/tunnels', getTunnels);
 
 function getCode(){
   let code = String(Math.floor(Math.random() * 1000000));
-  console.log("Create code: ", code)
   if (code.length != 6) return getCode();
   else return code;
 }
 
-function execute(req, res, command='', success={}) {
+function execute(command='', success={}) {
   exec(`${command}`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`);
-      res.send({ message: error.message });
-      // return;
+      return { message: error.message };
     }
     if (stderr) {
       console.log(`stderr: ${stderr}`);
-      res.send({ message: stderr })
-      // return;
+      return { message: stderr };
     }
-    res.send(success);
     console.log(`stdout: ${stdout}`);
+    return success;
   });
 }
-
+// save phoneNumber and send confirm sms
 app.post('/', (req, res) => {
   let { phone, text } = req.body;
-  console.log("came post request");
   let code = getCode();
   temp.phoneNumber[phone] = code;
   writeData('./data/temp.json',temp);
   code = `Confirm code: ${code}`;
-  execute(req, res, `termux-sms-send -n ${phone} ${code}`, { message: `SMS has been sent successfully`, phone });
+  const result = execute(`termux-sms-send -n ${phone} ${code}`, { message: `SMS has been sent successfully`, phone });
+  res.send(result);
 })
 
+// check confirm code
 app.post('/confirm', (req, res) => {
   const { phone, code } = req.body;
   if (!phone && !code) res.status(400).send({ message: "Bad request" });
   else {
     let keys = Object.keys(temp.phoneNumber);
-    // console.log(keys)
     if (!keys.includes(phone)) res.status(404).send({ message: "phone number not found" });
     else {
       if (temp.phoneNumber[phone] == code ) res.send({ message: "checked", login: true });
